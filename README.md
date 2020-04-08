@@ -1,10 +1,5 @@
 # windows 编译evhtp 说明
 
-# 目录说明
-
-* ev-thr （vs 测试例子）
-* libevhtp-1.tar.gz（libevhtp修改后的源码包，可以直接查看修改内容）
-
 # 依赖库
 
 evhtp依赖库
