@@ -138,12 +138,12 @@ SET(CMAKE_include_CURRENT_DIR ON)
 
 find_package(LibEvent REQUIRED)
 
-if (NOT LIBEVENT_OPENSSL_LIBRARY)
-    set (EVHTP_DISABLE_SSL ON)
-endif()
+#if (NOT LIBEVENT_OPENSSL_LIBRARY)
+#    set (EVHTP_DISABLE_SSL ON)
+#endif()
 
 if (NOT EVHTP_DISABLE_SSL)
-    find_package(OpenSSL)
+#    find_package(OpenSSL)
 endif()
 
 find_path(LIBEVENT_include_DIR event2/event.h REQUIRED)
@@ -155,11 +155,11 @@ endif()
 if (NOT OPENSSL_FOUND)
     message(STATUS "${Yellow}Unable to find libssl.. Disabling SSL support ${ColourReset}")
 
-    set (EVHTP_DISABLE_SSL        ON)
-    set (OPENSSL_CRYPTO_LIBRARY   "")
-    set (OPENSSL_include_DIR      "")
-    set (OPENSSL_LIBRARIES        "")
-    set (LIBEVENT_OPENSSL_LIBRARY "")
+    #set (EVHTP_DISABLE_SSL        ON)
+    #set (OPENSSL_CRYPTO_LIBRARY   "")
+    #set (OPENSSL_include_DIR      "")
+    #set (OPENSSL_LIBRARIES        "")
+    #set (LIBEVENT_OPENSSL_LIBRARY "")
 elseif(APPLE)
     # darwin based hosts have deprecated normal openssl functions, which is
     # annoying to see warnings, for now, just ignore them.

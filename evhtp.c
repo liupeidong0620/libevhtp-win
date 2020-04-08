@@ -3,14 +3,15 @@
 #include <stdint.h>
 #include <errno.h>
 #include <signal.h>
-#include <strings.h>
 #include <inttypes.h>
 #ifndef WIN32
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
+#include <strings.h>
 #else
+#include "strings.h"
 #define WINVER 0x0501
 #include <winsock2.h>
 #include <ws2tcpip.h>
@@ -211,6 +212,32 @@ htp__strdup_(const char * str)
     return strdup(str);
 }
 
+#ifdef NO_STRNDUP
+static char *
+strndup(const char * s, size_t n)
+{
+	size_t len = strnlen(s, n);
+	char * ret;
+
+	if (len < n)
+	{
+		return htp__strdup_(s);
+	}
+
+	if ((ret = htp__malloc_(n + 1)) == NULL)
+	{
+		return NULL;
+	}
+
+	ret[n] = '\0';
+
+	memcpy(ret, s, n);
+
+	return ret;
+}
+
+#endif
+
 static char *
 htp__strndup_(const char * str, size_t len)
 {
@@ -389,31 +416,7 @@ strnlen(const char * s, size_t maxlen)
 
 #endif
 
-#ifdef NO_STRNDUP
-static char *
-strndup(const char * s, size_t n)
-{
-    size_t len = strnlen(s, n);
-    char * ret;
 
-    if (len < n)
-    {
-        return htp__strdup_(s);
-    }
-
-    if ((ret = htp__malloc_(n + 1)) == NULL)
-    {
-        return NULL;
-    }
-
-    ret[n] = '\0';
-
-    memcpy(ret, s, n);
-
-    return ret;
-}
-
-#endif
 
 /*
  * PRIVATE FUNCTIONS

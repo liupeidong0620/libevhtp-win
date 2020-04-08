@@ -11,17 +11,18 @@
 #include <sys/syscall.h>
 #include <sys/ioctl.h>
 #include <sys/queue.h>
-#endif
-
 #include <unistd.h>
-#include <pthread.h>
+#endif
+#include <sys/queue.h>
 
+#include <pthread.h>
 #include <event2/event.h>
 #include <event2/thread.h>
 
 #include "internal.h"
 #include "evhtp/thread.h"
 
+struct evthr_pool_slist;
 typedef struct evthr_cmd        evthr_cmd_t;
 typedef struct evthr_pool_slist evthr_pool_slist_t;
 
@@ -29,7 +30,8 @@ struct evthr_cmd {
     uint8_t  stop;
     void   * args;
     evthr_cb cb;
-} __attribute__((packed));
+};
+//__attribute__((packed));
 
 TAILQ_HEAD(evthr_pool_slist, evthr);
 
@@ -59,7 +61,7 @@ struct evthr {
     int            pool_rdr;
     struct event * shared_pool_ev;
 #endif
-    TAILQ_ENTRY(evthr) next;
+   TAILQ_ENTRY(evthr) next;
 };
 
 #define _evthr_read(thr, cmd, sock) \
@@ -439,8 +441,11 @@ evthr_pool_start(evthr_pool_t * pool) {
         if (evthr_start(evthr) < 0) {
             return -1;
         }
-
+#ifndef WIN32
         usleep(5000);
+#else
+		Sleep(5);
+#endif
     }
 
     return 0;

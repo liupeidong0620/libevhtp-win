@@ -6,7 +6,11 @@
 #include <stdint.h>
 #include <errno.h>
 #include <ctype.h>
+#ifndef WIN32
 #include <unistd.h>
+#else
+#include "strings.h"
+#endif
 
 #include "internal.h"
 #include "evhtp/parser.h"
@@ -395,10 +399,10 @@ str_to_uint64(char * str, size_t n, int * err)
     return value;
 }
 
-static inline ssize_t
+static inline size_t
 _str_to_ssize_t(char * str, size_t n)
 {
-    ssize_t value;
+    size_t value;
 
     if (n == 0)
     {
